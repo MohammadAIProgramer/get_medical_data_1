@@ -1,0 +1,201 @@
+:root{
+	--muted:#6b7280;
+	--bg:#f7fafc;
+}
+@font-face{
+	font-family: 'Pinar';
+	/* load from workspace root; ensure server serves this file */
+	src: local('Pinar'), url('Pinar.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+body{font-family:'Pinar', Inter, 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);margin:0;color:#081123}
+.wrap{max-width:1100px;margin:18px auto;padding:18px}
+header{margin-bottom:12px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.toolbar .title h1{margin:0;font-size:1.25rem}
+.toolbar .title .muted{margin:0;font-size:0.9rem;color:var(--muted)}
+.toolbar .session{display:flex;align-items:center;gap:.5rem}
+.toolbar label{font-size:.9rem;color:var(--muted)}
+.toolbar input{padding:.35rem .5rem;border-radius:6px;border:1px solid #dfe8f3}
+.kbd-legend span{margin-left:.4rem}
+.galleries{display:flex;gap:1rem;margin-bottom:.75rem}
+.gallery{flex:1;display:flex;flex-direction:column;gap:.5rem;padding:8px;overflow:hidden;border:1px solid #e8eef8;border-radius:8px;background:#fff;position:relative}
+.gallery h3{margin:0;color:var(--muted);padding:.25rem}
+.gallery-header{position:sticky;top:8px;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;background:rgba(255,255,255,0.95);backdrop-filter:blur(4px);padding:.25rem .5rem;border-radius:6px;z-index:3;margin-bottom:6px}
+.gallery .thumbs{display:flex;gap:.5rem;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:6px;padding-top:10px;min-height:100px;align-items:center}
+.gallery .thumbs::-webkit-scrollbar{height:10px}
+.gallery .thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.12);border-radius:6px}
+.thumb{background:#fff;border-radius:6px;padding:.3rem;box-shadow:0 6px 18px rgba(2,6,23,0.06);display:inline-flex;flex-direction:column;align-items:center;min-width:150px;margin-right:.5rem}
+.thumb img{width:150px;height:110px;object-fit:cover;border-radius:4px;display:block}
+.thumb .meta{font-size:.75rem;color:#334;display:flex;flex-direction:column;align-items:center;margin-top:.35rem}
+.thumb .meta .small{font-size:.7rem;color:#6b7280}
+.actions{display:flex;gap:.25rem;margin-top:.4rem}
+.actions button{background:transparent;border:none;padding:.25rem;border-radius:6px;cursor:pointer}
+.actions button:hover{background:rgba(0,0,0,0.04)}
+.gallery-header{display:flex;gap:.5rem;align-items:center;justify-content:space-between;width:100%}
+.gallery .thumbs{display:flex;gap:.5rem;overflow:auto;padding:6px}
+.device-badge{font-size:.8rem;color:var(--muted);margin-left:.4rem}
+button[data-role="pinBtn"]{background:transparent;border:none;cursor:pointer;padding:.25rem}
+.media video.flash{box-shadow:0 0 0 8px rgba(255,255,255,0.6) inset}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.pane{background:#fff;border-radius:8px;padding:10px;border:1px solid #e8eef8}
+.pane h2{margin:0 0 .5rem 0}
+.controls{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.hint span{font-size:1.15rem}
+.media video{width:100%;height:240px;background:#000;border-radius:6px}
+.foot{margin-top:12px;color:var(--muted)}
+
+
+.file-attach{
+	display:flex;
+	align-items:center;
+	gap:.75rem;
+	padding:8px 0;
+	margin-top:8px;
+}
+
+/* Save button (green) */
+.btn{padding:.55rem .9rem;border-radius:8px;border:none;cursor:pointer;font-size:0.95rem}
+.btn-save{background:linear-gradient(180deg,#16a34a,#059669);color:#fff;box-shadow:0 8px 20px rgba(5,150,105,0.12);font-family: 'Pinar', 'Segoe UI', Roboto, Arial, sans-serif;}
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(5,150,105,0.16)}
+.btn-save:focus{outline:3px solid rgba(16,185,129,0.18);outline-offset:3px}
+
+/* Keep the native <input type=file> available to assistive tech but visually hidden */
+.file-attach input{
+	position:absolute;
+	width:1px;
+	height:1px;
+	padding:0;
+	margin:-1px;
+	overflow:hidden;
+	clip:rect(0 0 0 0);
+	white-space:nowrap;
+	border:0;
+}
+
+/* Style the label (the visible control) */
+.file-attach label{
+	display:inline-flex;
+	align-items:center;
+	gap:0.5rem;
+	padding:.55rem .9rem;
+	border-radius:8px;
+	background:linear-gradient(180deg,#0b63d6,#0b5fff);
+	color:#fff;
+	cursor:pointer;
+	border:none;
+	box-shadow:0 8px 20px rgba(11,99,214,0.12);
+	transition:transform .12s ease,box-shadow .12s ease,opacity .12s ease;
+}
+.file-attach label:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(11,99,214,0.16)}
+.file-attach label:focus{outline:3px solid rgba(11,99,214,0.18);outline-offset:3px}
+
+/* filename display with truncation */
+.file-attach .file-name{
+	font-size:.95rem;
+	color:#081123;
+	margin-left:.6rem;
+	/* make this element look like a large input box */
+	display:inline-block;
+	padding:.5rem .75rem;
+	border:1px solid #dfe8f3;
+	background:#ffffff;
+	border-radius:8px;
+	min-width:320px;
+	max-width:100%;
+	flex:1 1 420px; /* allow it to grow while keeping a sensible default */
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	cursor:pointer;
+}
+
+/* hide empty filename element to avoid extra gap */
+.file-attach .file-name:empty{display:none}
+#patient-desc{width:100%;min-height:120px;padding:12px;border:2px solid #e6f0ff;border-radius:10px;font-size:1rem;resize:vertical;font-family:Pinar, 'Segoe UI', Roboto, Arial, sans-serif}
+.patient-desc2{width:33%;height:70px;padding:14px;border:2px solid #e6f0ff;border-radius:10px;font-size:1.05rem;line-height:1.45;box-sizing:border-box;font-family:Pinar, 'Segoe UI', Roboto, Arial, sans-serif;}
+
+/* styles for patient description area */
+.patient-desc-row{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.patient-desc-row .patient-desc-header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.patient-desc-row .patient-desc-header h3{margin:0;font-size:1.05rem}
+.patient-desc-row .patient-desc-header .small{margin:0;color:var(--muted);font-size:.85rem}
+#patient-desc{width:100%;min-height:120px;padding:12px;border:2px solid #e6f0ff;border-radius:10px;font-size:1rem;resize:vertical;font-family:Pinar, 'Segoe UI', Roboto, Arial, sans-serif}
+#patient-desc2{width:33%;height:70px;padding:14px;border:2px solid #e6f0ff;border-radius:10px;font-size:1.05rem;line-height:1.45;box-sizing:border-box;font-family:Pinar, 'Segoe UI', Roboto, Arial, sans-serif;}
+
+#patient-desc:focus{outline:none;box-shadow:0 8px 24px rgba(11,99,214,0.08);border-color:#b6d1ff}
+#patient-desc:hover{border-color:#d0e6ff}
+
+/* patient description */
+.patient-desc-row{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+.patient-desc-row .patient-desc-header{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.patient-desc-row .patient-desc-header h3{margin:0;font-size:1.1rem;}
+.patient-desc-row .patient-desc-header .small{margin:0;color:var(--muted);font-size:.88rem;}
+
+/* strong, specific selector to avoid being overridden */
+main.wrap .patient-desc-row textarea#patient-desc,
+textarea#patient-desc{
+	display:block !important;
+	width:100% !important;
+	max-width:100% !important;
+	min-height:160px !important;
+	padding:16px !important;
+	border:2px solid #e6f0ff !important;
+	border-radius:10px !important;
+	font-size:1.05rem !important;
+	line-height:1.45 !important;
+	resize:vertical !important;
+	box-sizing:border-box !important;
+	font-family: 'Pinar', 'Segoe UI', Roboto, Arial, sans-serif !important;
+	-webkit-font-smoothing:antialiased !important;
+}
+
+textarea#patient-desc:focus{outline:none !important;box-shadow:0 10px 30px rgba(11,99,214,0.09) !important;border-color:#b6d1ff !important}
+textarea#patient-desc:hover{border-color:#d0e6ff !important}
+
+/* placeholder styling */
+#patient-desc::placeholder{color:#7c8896;opacity:0.9}
+
+.patient-desc-meta{display:flex;justify-content:flex-end;color:var(--muted);font-size:.85rem;margin-top:4px}
+.patient-desc-meta #patient-desc-count{font-weight:700;color:#334}
+
+.save-row{display:flex;justify-content:center;margin:12px 0 28px 0}
+.save-row .btn-save{padding:.7rem 1.1rem;font-size:1rem}
+
+/* Stronger rule for save button to avoid being overridden by other button rules */
+.save-row .btn.btn-save,
+.btn.btn-save.save-row,
+.btn-save.save-row{
+	-webkit-appearance: none;
+	appearance: none;
+	background: linear-gradient(180deg,#16a34a,#059669) !important;
+	color: #fff !important;
+	box-shadow: 0 10px 28px rgba(5,150,105,0.14) !important;
+	border: none !important;
+}
+
+/* Highest-specificity fallback for the save button id to guarantee styling */
+#save-record{
+	width: 100%;
+}
+#save-record.btn,
+#save-record.btn-save{
+	-webkit-appearance: none !important;
+	appearance: none !important;
+	background: linear-gradient(180deg,#16a34a,#059669) !important;
+	color: #fff !important;
+	box-shadow: 0 10px 28px rgba(5,150,105,0.14) !important;
+	border: none !important;
+	padding:.7rem 1.1rem !important;
+	font-size:1rem !important;
+}
+
+/* پوشش پیش‌نمایش فایل */
+.preview-overlay{position:fixed;inset:0;background:rgba(3,6,23,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
+.preview-overlay.active{display:flex}
+.preview-box{width:90%;height:90%;background:#fff;border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.preview-toolbar{display:flex;align-items:center;justify-content:space-between;padding:.5rem;border-bottom:1px solid #eef3fb}
+.preview-iframe{flex:1;border:none}
+.preview-close{background:#f88;border:none; border-radius: 10px; padding:.5rem;cursor:pointer;font-family:'Pinar', Inter, 'Segoe UI', Roboto, Arial, sans-serif;}

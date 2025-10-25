@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ثبت وضعیت بیمار</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <main class="wrap">
+      <header>
+  <div class="toolbar" role="region" aria-label="کنترل‌های جلسه">
+          <div class="title">
+            <h1>ثبت تصاویر دوچشم</h1>
+            <p class="muted">برای ثبت بالینی — دوربین را انتخاب و تصاویر چشم چپ/راست را ثبت کنید.</p>
+          </div>
+          <div class="session">
+            <label for="patient-id">شناسه بیمار</label>
+            <input id="patient-id" type="text" placeholder="شناسه بیمار را وارد کنید" aria-label="شناسه بیمار" />
+            <div class="kbd-legend" aria-hidden="true">
+              <span title="ثبت (فاصله)">📸</span>
+              <span title="دو بار کلیک برای ثبت">↬</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="pane" id="left">
+          <h2>چپ</h2>
+          <div class="controls">
+            <select data-role="deviceSelect"></select>
+            <button data-role="pinBtn" title="ثبت به عنوان پیش‌فرض">📌</button>
+            <span class="device-badge" data-role="badge"></span>
+            <div class="hint" aria-hidden="true"><span title="کلیک برای انتخاب">🔲</span> <span title="دو بار کلیک برای ثبت">📸</span></div>
+          </div>
+          <div class="media">
+            <video data-role="video" autoplay playsinline></video>
+          </div>
+        </div>
+
+        <div class="pane" id="right">
+          <h2>راست</h2>
+          <div class="controls">
+            <select data-role="deviceSelect"></select>
+            <button data-role="pinBtn" title="ثبت به عنوان پیش‌فرض">📌</button>
+            <span class="device-badge" data-role="badge"></span>
+            <div class="hint" aria-hidden="true"><span title="کلیک برای انتخاب">🔲</span> <span title="دو بار کلیک برای ثبت">📸</span></div>
+          </div>
+          <div class="media">
+            <video data-role="video" autoplay playsinline></video>
+          </div>
+        </div>
+      </section>
+      <div class="galleries">
+        <div id="gallery-left" class="gallery" aria-label="تصاویر چشم چپ">
+          <div class="gallery-header"><h3>چپ</h3><button id="clear-left" title="پاک کردن گالری چپ">🧹</button></div>
+          <div class="thumbs"></div>
+        </div>
+        <div id="gallery-right" class="gallery" aria-label="تصاویر چشم راست">
+          <div class="gallery-header"><h3>راست</h3><button id="clear-right" title="پاک کردن گالری راست">🧹</button></div>
+          <div class="thumbs"></div>
+        </div>
+      </div>
+
+      <footer class="foot">
+      </footer>
+      <div class="file-attach">
+        <label for="attach-file" tabindex="0">انتخاب فایل (PDF / HTML)</label>
+        <input id="attach-file" type="file" accept=".pdf,application/pdf,text/html" aria-label="انتخاب فایل PDF یا HTML" />
+
+        <label for="auto-attach-file" tabindex="0">آخرین فایل</label>
+        <input id="auto-attach-file" type="button" accept=".pdf,application/pdf,text/html" aria-label="انتخاب فایل PDF یا HTML" />
+
+        <span class="file-name" id="attach-file-name" aria-live="polite"></span>
+      </div>
+
+      <div>
+        <textarea id="patient-desc-name" class="patient-desc2" placeholder="نام" aria-label="نام بیمار" maxlength="50" ></textarea>
+        <textarea id="patient-desc-age" class="patient-desc2" placeholder="سن" aria-label="سن بیمار" maxlength="50" ></textarea>
+        <textarea id="patient-desc-id" class="patient-desc2" placeholder="شناسه بیمار" aria-label="شناسه بیمار" maxlength="50" ></textarea>
+      </div>
+
+      <div class="patient-desc-row">
+        <div class="patient-desc-header">
+          <h3>توضیحات بیمار</h3>
+          <p class="muted small">تشخیص خود را از وضعیت بیمار و نوع بیماری آن شرح دهید</p>
+        </div>
+        <!-- speech controls will be injected by app.js -->
+        <textarea id="patient-desc" placeholder="توضیحی درباره‌ی بیمار وارد کنید" aria-label="توضیحات بیمار" maxlength="1000"></textarea>
+      </div>
+
+      <div class="save-row">
+        <button id="save-record" class="btn btn-save" type="button">ذخیره</button>
+      </div>
+    </main>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
