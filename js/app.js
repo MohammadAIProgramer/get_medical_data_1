@@ -8,7 +8,8 @@
 
 import { PaneView } from './view.js';
 import { PaneController } from './controller.js';
-import { pickPreferredIndices } from './deviceUtils.js';
+import { CameraModel } from './model.js';
+import { uploadRecord } from './utils.js';
 import { Gallery } from './gallery.js';
 
 const shared = { active: null, focus: null };
@@ -31,31 +32,14 @@ async function init() {
   const right = setupPane('right');
   shared.left = left.ctrl;
   shared.right = right.ctrl;
+  CameraModel.init(left, right);
 
-  try {
-    const CameraModel = (await import('./model.js')).CameraModel;
-    let devices = await (new CameraModel()).enumerate();
-    const needLabels = devices.every(d => !d.label);
-    if (needLabels && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      try {
-        const tempStream = await navigator.mediaDevices.getUserMedia({ video: true });
-        for (const t of tempStream.getTracks()) t.stop();
-        devices = await (new CameraModel()).enumerate();
-      } catch (permErr) {
-        console.warn('درخواست دسترسی رد یا ناموفق بود', permErr);
-      }
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && e.target.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      if (shared.focus) shared.focus.snap();
     }
-    if (left.view && left.view.fillDevices) left.view.fillDevices(devices);
-    if (right.view && right.view.fillDevices) right.view.fillDevices(devices);
-
-    const { leftIdx, rightIdx } = pickPreferredIndices(devices);
-    if (left.view && left.view.select) left.view.select.selectedIndex = leftIdx >= 0 ? leftIdx : 0;
-    if (right.view && right.view.select) right.view.select.selectedIndex = rightIdx >= 0 ? rightIdx : (devices.length > 1 ? 1 : 0);
-    if (devices[leftIdx] && left.view) left.view.root.dataset.prefDeviceId = devices[leftIdx].deviceId;
-    if (devices[rightIdx] && right.view) right.view.root.dataset.prefDeviceId = devices[rightIdx].deviceId;
-  } catch (e) {
-    console.error('شمارش دستگاه‌ها ناموفق بود', e);
-  }
+  });
 
   // file attach controls
   const fileInput = document.getElementById('attach-file');
@@ -111,12 +95,6 @@ async function init() {
     });
   }
   
-  window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && e.target.tagName !== "TEXTAREA") {
-      e.preventDefault();
-      if (shared.focus) shared.focus.snap();
-    }
-  });
 
 
   const clearLeft = document.getElementById('clear-left');
@@ -217,132 +195,6 @@ async function init() {
     });
   })();
 
-  // helpers for gallery conversion
-  async function srcToBlob(url) {
-    if (!url) return null;
-    if (url.startsWith('data:')) {
-      const parts = url.split(',');
-      const metaMatch = parts[0].match(/data:(.*);base64/);
-      if (!metaMatch) return null;
-      const mime = metaMatch[1];
-      const bstr = atob(parts[1]);
-      let n = bstr.length;
-      const u8 = new Uint8Array(n);
-      while (n--) u8[n] = bstr.charCodeAt(n);
-      return new Blob([u8], { type: mime });
-    }
-    try {
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      return await res.blob();
-    } catch (e) {
-      console.warn('srcToBlob fetch failed', e);
-      return null;
-    }
-  }
-
-  async function collectImagesFromGallery(selectorPrefix) {
-    const thumbs = document.querySelectorAll(`${selectorPrefix} .thumbs img`);
-    const files = [];
-    let idx = 1;
-    for (const img of thumbs) {
-      const src = img.src;
-      try {
-        const blob = await srcToBlob(src);
-        if (!blob) continue;
-        const ext = blob.type ? blob.type.split('/').pop() : 'jpg';
-        const side = selectorPrefix.includes('left') ? 'left' : 'right';
-        const filename = `${side}-${idx}.${ext}`;
-        const file = new File([blob], filename, { type: blob.type || `image/${ext}` });
-        files.push(file);
-        idx++;
-      } catch (err) {
-        console.warn('خطا در تبدیل تصویر به Blob:', err);
-      }
-    }
-    return files;
-  }
-
-  // helper: try multiple element ids for a logical field
-  function getFieldValue(possibleIds) {
-    for (const id of possibleIds) {
-      const el = document.getElementById(id);
-      if (el) return el.value || '';
-    }
-    return '';
-  }
-
-  // main uploader
-  async function uploadRecord({ url = '/api/records', authToken = null } = {}) {
-    const name = (document.getElementById('patient-desc-name') || {}).value || '';
-    const age = (document.getElementById('patient-desc-age') || {}).value || '';
-    // read toolbar patient-id too
-    const pid = (document.getElementById('patient-desc-id') || document.getElementById('patient-id') || {}).value || '';
-    const desc = (document.getElementById('patient-desc') || {}).value || '';
-
-    if (!pid || !String(pid).trim()) {
-      throw new Error('patientId is required — لطفاً شناسه بیمار را وارد کنید.');
-    }
-
-    const form = new FormData();
-    form.append('patientName', name);
-    form.append('patientAge', age);
-    form.append('patientId', pid);
-    form.append('description', desc);
-    form.append('timestamp', new Date().toISOString());
-
-    const attachInput = document.getElementById('attach-file');
-    if (attachInput && attachInput.files && attachInput.files.length > 0) {
-      form.append('attachment', attachInput.files[0], attachInput.files[0].name);
-    } else if (window._autoAttachedFile) {
-      form.append('attachment', window._autoAttachedFile, window._autoAttachedFile.name);
-    }
-
-    const leftFiles = await collectImagesFromGallery('#gallery-left');
-    leftFiles.forEach(f => form.append('leftImages', f, f.name));
-
-    const rightFiles = await collectImagesFromGallery('#gallery-right');
-    rightFiles.forEach(f => form.append('rightImages', f, f.name));
-
-    // enumerate form for debugging
-    try {
-      const entries = [];
-      for (const pair of form.entries()) {
-        if (pair[1] instanceof File) entries.push([pair[0], pair[1].name]);
-        else entries.push([pair[0], String(pair[1])]);
-      }
-      console.log('FormData to send:', entries);
-    } catch (e) {
-      console.warn('Could not enumerate FormData entries', e);
-    }
-
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      if (authToken) xhr.setRequestHeader('Authorization', authToken);
-
-      xhr.upload.onprogress = (evt) => {
-        if (evt.lengthComputable) {
-          const percent = Math.round((evt.loaded / evt.total) * 100);
-          console.log('upload progress', percent, '%');
-        }
-      };
-
-      xhr.onload = () => {
-        const text = xhr.responseText || '';
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try { resolve(JSON.parse(text || '{}')); }
-          catch (e) { resolve({ status: xhr.status, text }); }
-        } else {
-          console.error('Upload failed:', xhr.status, xhr.statusText, text);
-          reject(new Error('Upload failed: ' + xhr.status + ' ' + xhr.statusText + '\n' + text));
-        }
-      };
-
-      xhr.onerror = () => reject(new Error('Network error during upload'));
-      xhr.send(form);
-    });
-  }
 
   // bind to save button
   const saveBtn = document.getElementById('save-record');
@@ -351,7 +203,9 @@ async function init() {
       try {
         saveBtn.disabled = true;
         saveBtn.textContent = 'در حال ارسال...';
-        const res = await uploadRecord({ url: '/api/records' });
+        const res = await uploadRecord({ 
+          url: '/api/records',
+        });
         console.log('Server response', res);
         if (res && res.ok) {
           alert('اطلاعات با موفقیت ارسال شد');

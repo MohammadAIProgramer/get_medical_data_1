@@ -111,8 +111,8 @@ class FileManager {
       final pd = await ensurePatientDir(patientId);
       final mainFile = File(pd.path + Platform.pathSeparator + 'record.json');
       await mainFile.writeAsString(jsonEncode(record), flush: true);
-      final timestamped = File(pd.path + Platform.pathSeparator + 'record_' + DateTime.now().millisecondsSinceEpoch.toString() + '.json');
-      await timestamped.writeAsString(jsonEncode(record), flush: true);
+      // final timestamped = File(pd.path + Platform.pathSeparator + 'record_' + DateTime.now().millisecondsSinceEpoch.toString() + '.json');
+      // await timestamped.writeAsString(jsonEncode(record), flush: true);
       return true;
     } catch (e) {
       stderr.writeln('Error writing patient record for ' + patientId + ': ' + e.toString());

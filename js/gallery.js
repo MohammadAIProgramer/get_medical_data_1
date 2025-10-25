@@ -41,4 +41,59 @@ export class Gallery {
   }
 
   element() { return this.container; }
+  
+  // helpers for gallery conversion
+  static async srcToBlob(url) {
+    if (!url) return null;
+    if (url.startsWith('data:')) {
+      const parts = url.split(',');
+      const metaMatch = parts[0].match(/data:(.*);base64/);
+      if (!metaMatch) return null;
+      const mime = metaMatch[1];
+      const bstr = atob(parts[1]);
+      let n = bstr.length;
+      const u8 = new Uint8Array(n);
+      while (n--) u8[n] = bstr.charCodeAt(n);
+      return new Blob([u8], { type: mime });
+    }
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      return await res.blob();
+    } catch (e) {
+      console.warn('srcToBlob fetch failed', e);
+      return null;
+    }
+  }
+
+  static async collectImagesFromGallery(selectorPrefix) {
+    const thumbs = document.querySelectorAll(`${selectorPrefix} .thumbs img`);
+    const files = [];
+    let idx = 1;
+    for (const img of thumbs) {
+      const src = img.src;
+      try {
+        const blob = await Gallery.srcToBlob(src);
+        if (!blob) continue;
+        const ext = blob.type ? blob.type.split('/').pop() : 'jpg';
+        const side = selectorPrefix.includes('left') ? 'left' : 'right';
+        const filename = `${side}-${idx}.${ext}`;
+        const file = new File([blob], filename, { type: blob.type || `image/${ext}` });
+        files.push(file);
+        idx++;
+      } catch (err) {
+        console.warn('خطا در تبدیل تصویر به Blob:', err);
+      }
+    }
+    return files;
+  }
+
+  // helper: try multiple element ids for a logical field
+  static getFieldValue(possibleIds) {
+    for (const id of possibleIds) {
+      const el = document.getElementById(id);
+      if (el) return el.value || '';
+    }
+    return '';
+  }
 }
