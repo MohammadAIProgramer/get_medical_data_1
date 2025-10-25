@@ -17,8 +17,8 @@ This web application provides a client-side interface for capturing and submitti
 
 | File | Responsibility |
 |------|----------------|
-| `formBuilder.js` | Extracts data from DOM and builds a `FormData` object ready to be uploaded. |
-| `api.js` | Handles HTTP uploads, progress reporting, and response parsing. |
+| `utils.js` | Extracts data from DOM and builds a `FormData` object ready to be uploaded. |
+| `app.js` | Handles HTTP uploads, progress reporting, and response parsing. |
 | `model.js` | Manages camera devices (enumeration, open/close) and initialization logic for dual-camera setup. |
 | `gallery.js` | UI gallery management and utilities to convert displayed images into `File` objects. |
 | `utils.js` | Small utilities such as `downloadURL()` and `readFileAsDataURL()` used across modules. |
@@ -93,7 +93,7 @@ const leftFiles = await Gallery.collectImagesFromGallery('#gallery-left');
 
 ---
 
-### `buildFormDataFromUI()` (recommended location: `formBuilder.js`)
+### `buildFormDataFromUI()` (recommended location: `utils.js`)
 
 **Signature:** `export async function buildFormDataFromUI() -> Promise<FormData>`
 
@@ -125,14 +125,14 @@ const leftFiles = await Gallery.collectImagesFromGallery('#gallery-left');
 **Example:**
 ```js
 const form = await buildFormDataFromUI();
-await sendFormData(form, { url: '/api/records' });
+await sendFormData(form, { url: '/app/records' });
 ```
 
 ---
 
 ### `uploadRecord(options)` — (existing combined function; refactor recommended)
 
-**Signature (current):** `export async function uploadRecord({ url = '/api/records', authToken = null } = {})`
+**Signature (current):** `export async function uploadRecord({ url = '/app/records', authToken = null } = {})`
 
 **Purpose:** Convenience function in current code that both builds the `FormData` (from DOM) and performs the upload via XHR. For maintainability, it is recommended to split this behavior into `buildFormDataFromUI()` and `sendFormData()` as separate responsibilities.
 
@@ -148,9 +148,9 @@ const response = await sendFormData(form, { url, authToken, onProgress });
 
 ---
 
-### `sendFormData(formData, options)` (api.js)
+### `sendFormData(formData, options)` (app.js)
 
-**Signature:** `export async function sendFormData(formData, { url = '/api/records', authToken = null, onProgress = null } = {})`
+**Signature:** `export async function sendFormData(formData, { url = '/app/records', authToken = null, onProgress = null } = {})`
 
 **Purpose:** Uploads a `FormData` object to the specified endpoint. Uses `XMLHttpRequest` to gain access to `upload.onprogress` events. Parses JSON responses when possible.
 
@@ -170,7 +170,7 @@ const response = await sendFormData(form, { url, authToken, onProgress });
 **Example:**
 ```js
 await sendFormData(form, {
-  url: 'http://localhost:8001/api/records',
+  url: 'http://localhost:8001/app/records',
   authToken: 'Bearer ...',
   onProgress: p => console.log('Upload progress', p)
 });
@@ -178,7 +178,7 @@ await sendFormData(form, {
 
 ---
 
-### `fetchLatestFileAsFile()` (api.js helper)
+### `fetchLatestFileAsFile()` (app.js helper)
 
 **Signature:** `export async function fetchLatestFileAsFile() -> Promise<File|null>`
 
@@ -196,7 +196,7 @@ if (auto) form.append('attachment', auto, auto.name);
 
 ## `model.js` — `CameraModel` Class (Detailed)
 
-**Purpose:** Provides an abstraction over browser `MediaDevices` APIs to enumerate cameras, open/close media streams, and perform initial dual-pane setup for left/right camera views.
+**Purpose:** Provides an abstraction over browser `MediaDevices` apps to enumerate cameras, open/close media streams, and perform initial dual-pane setup for left/right camera views.
 
 **Definition Overview:**
 ```js
@@ -244,9 +244,9 @@ await CameraModel.init(leftPane, rightPane);
 
 ---
 
-## HTTP API Contract (Server Expectations)
+## HTTP app Contract (Server Expectations)
 
-- **Endpoint (upload):** `POST /api/records`
+- **Endpoint (upload):** `POST /app/records`
 - **Content-Type:** `multipart/form-data` (browser assigns boundary)
 - **Form fields:** `patientId` (required), `patientName`, `patientAge`, `description`, `timestamp`, `attachment` (optional, single), `leftImages` (multiple), `rightImages` (multiple)
 - **Success response:** `200 OK` with JSON body, e.g.:
@@ -299,7 +299,7 @@ for (const [k, v] of form.entries()) {
 ## Suggested Improvements & Roadmap
 
 - Split `uploadRecord()` into separate `buildFormDataFromUI()` and `sendFormData()` functions for single responsibility and testability.
-- Add unit tests for `formBuilder` using mocked DOM inputs and file objects.
+- Add unit tests for `utils` using mocked DOM inputs and file objects.
 - Add server-side authorization and per-user access control for records.
 - Provide a small CLI or admin UI for browsing saved patient records and downloading metadata.
 
