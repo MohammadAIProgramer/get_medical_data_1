@@ -15,12 +15,9 @@
             <p class="muted">برای ثبت بالینی — دوربین را انتخاب و تصاویر چشم چپ/راست را ثبت کنید.</p>
           </div>
           <div class="session">
-            <label for="patient-id">شناسه بیمار</label>
-            <input id="patient-id" type="text" placeholder="شناسه بیمار را وارد کنید" aria-label="شناسه بیمار" />
-            <div class="kbd-legend" aria-hidden="true">
-              <span title="ثبت (فاصله)">📸</span>
-              <span title="دو بار کلیک برای ثبت">↬</span>
-            </div>
+            <label for="date-time">تاریخ</label>
+            <input id="date-time" type="text" placeholder="تاریخ امروز" aria-label="تاریخ امروز" />
+            <span title="ثبت (فاصله)">📅</span>
           </div>
         </div>
       </header>
@@ -78,16 +75,16 @@
       <div>
         <textarea id="patient-desc-name" class="patient-desc2" placeholder="نام" aria-label="نام بیمار" maxlength="50" ></textarea>
         <textarea id="patient-desc-age" class="patient-desc2" placeholder="سن" aria-label="سن بیمار" maxlength="50" ></textarea>
-        <textarea id="patient-desc-id" class="patient-desc2" placeholder="شناسه بیمار" aria-label="شناسه بیمار" maxlength="50" ></textarea>
+        <textarea id="patient-desc-id" class="patient-desc2" placeholder="کدملی بیمار" aria-label="کدملی بیمار" maxlength="50" ></textarea>
       </div>
 
       <div class="patient-desc-row">
         <div class="patient-desc-header">
-          <h3>توضیحات بیمار</h3>
+          <h3>توضیحات تشخیص پزشک</h3>
           <p class="muted small">تشخیص خود را از وضعیت بیمار و نوع بیماری آن شرح دهید</p>
         </div>
         <!-- speech controls will be injected by app.js -->
-        <textarea id="patient-desc" placeholder="توضیحی درباره‌ی بیمار وارد کنید" aria-label="توضیحات بیمار" maxlength="1000"></textarea>
+        <textarea id="patient-desc" placeholder="توضیحی درباره‌ی تشخیص خود و بیماری وارد کنید" aria-label="توضیحات بیمار" maxlength="1000"></textarea>
       </div>
 
       <div class="save-row">

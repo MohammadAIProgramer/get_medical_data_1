@@ -41,6 +41,10 @@ async function init() {
     }
   });
 
+  //date time
+  const dateTime = document.getElementById('date-time');
+  dateTime.value = (new Date()).toISOString().split('T')[0];
+
   // file attach controls
   const fileInput = document.getElementById('attach-file');
   const fileNameDisplay = document.getElementById('attach-file-name');
@@ -206,7 +210,7 @@ async function init() {
         const res = await uploadRecord({ 
           url: '/api/records',
         });
-        console.log('Server response', res);
+        // console.log('Server response', res);
         if (res && res.ok) {
           alert('اطلاعات با موفقیت ارسال شد');
         } else {
@@ -218,6 +222,8 @@ async function init() {
       } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'ذخیره';
+        location.reload();
+        window.scrollTo(0, 0);
       }
     });
   } else {

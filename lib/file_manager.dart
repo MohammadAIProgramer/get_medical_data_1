@@ -88,7 +88,8 @@ class FileManager {
 
   /// Ensure a patient directory exists under root/patients/<patientId> and return it.
   Future<Directory> ensurePatientDir(String patientId) async {
-    final safeId = sanitizeFilename(patientId);
+    final now = DateTime.now().toString().split(" ")[0];
+    final safeId = sanitizeFilename("${patientId}_$now");
     final patientsRoot = Directory(joinPath('patients'));
     if (!await patientsRoot.exists()) await patientsRoot.create(recursive: true);
     final patientDirPath = patientsRoot.path + Platform.pathSeparator + safeId;

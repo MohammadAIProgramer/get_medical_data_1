@@ -32,7 +32,7 @@ ContentType contentTypeForFilename(String name) {
 
 /// Sanitize a filename by replacing unsafe characters.
 String sanitizeFilename(String name) {
-  return name.replaceAll(RegExp(r'[^a-zA-Z0-9_\-\.]'), '_');
+  return name.replaceAll(RegExp(r'[^a-zA-Z0-9_\-\.]'), '');
 }
 
 /// Write JSON response and close.
