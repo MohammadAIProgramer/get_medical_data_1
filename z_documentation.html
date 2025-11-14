@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مستند فنی کامل — سامانه ثبت پرونده پزشکی</title>
+<style>
+@font-face{
+	font-family: 'Pinar';
+	src: local('Pinar'), url('css/Pinar.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+body{margin:0;font-family:"Pinar","Vazirmatn","Segoe UI",Tahoma,"Noto Sans",sans-serif;background:#071726;color:#e6eef6;line-height:1.7;padding:24px;}
+.container{max-width:1100px;margin:0 auto;}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;}
+.logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#60a5fa,#7c3aed);display:flex;align-items:center;justify-content:center;color:#022;font-weight:800;}
+.title{font-size:20px;font-weight:700;}
+.subtitle{color:#9fb7dc;font-size:13px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.03);}
+.section-title{font-size:16px;color:#dbeafe;margin-bottom:8px;font-weight:700;}
+.lead{color:#cfe7ff}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.step{background:rgba(255,255,255,0.01);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);}
+pre.code{direction:ltr;text-align:left;white-space:pre-wrap;word-wrap:break-word;background:#021122;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;color:#bfe0ff;overflow:auto;}
+code.inline{direction:ltr;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:6px;color:#bfe0ff;font-family:ui-monospace}
+.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:right;color:#cfe7ff}
+.box-ltr{direction:ltr;text-align:left;background:rgba(255,255,255,0.01);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);}
+.btn{display:inline-block;padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;text-decoration:none;font-weight:700;margin-top:8px}
+@media (max-width:900px){.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="logo">EYE</div>
+      <div>
+        <div class="title">مستند فنی کامل — سامانه ثبت پرونده پزشکی</div>
+        <div class="subtitle">نسخهٔ تولید: 2.0.1 — تولید‌شده در 10 آبان 1404</div>
+      </div>
+    </div>
+    <div style="text-align:left">
+      <a class="btn">نسخه 2.0.1</a>
+    </div>
+  </div>
+
+  <div class="card" id="overview">
+    <div class="section-title">معرفی کلی و هدف سامانه</div>
+    <p class="lead">این سامانه یک صفحهٔ وب برای ثبت پروندهٔ پزشکی بیماران است. هدف اصلی آن فراهم آوردن یک جریان کاری ساده، امن و قابل پیگیری برای ثبت تصاویر عنبیه، اطلاعات شناسایی و توضیحات پزشک است. این مستند برای توسعه‌دهندگان و تیم فنی نوشته شده است تا نحوهٔ عملکرد سامانه، ساختار داده‌ها و نقش هر ماژول جاوااسکریپت را به‌روشنی توضیح دهد.</p>
+    <p>در عمل، پزشک یا کاربر مجاز با استفاده از دوربین دستگاه تصاویر عنبیهٔ بیماران را ثبت می‌کند، اطلاعات هویتی بیمار را وارد می‌نماید و در صورت نیاز توضیحات را به صورت گفتار ضبط می‌کند یا متن را مستقیماً تایپ می‌کند. پس از بازبینی داده‌ها، فرم به صورت یک درخواست multipart/form-data به سرور ارسال می‌شود تا پردازش و ذخیره‌سازی امن صورت گیرد.</p>
+  </div>
+
+  <div class="card" id="detailed-flow">
+    <div class="section-title">جریان کار(شرح گام‌به‌گام)</div>
+    <p class="lead">در این بخش هر مرحله از فرآیند به ترتیب و با جزئیات توضیح داده شده است. هدف این بخش آموزش روش کار به یک توسعه‌دهندهٔ جدید یا یک کارشناس فنی است تا بتواند فرآیند را اجرا، اشکال‌زدایی و توسعه دهد.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h4>گام اول — بارگذاری صفحه و مقداردهی اولیه</h4>
+        <p>با باز شدن صفحه، فایل <code class="inline">index.html</code> توسط مرورگر بارگذاری می‌شود و ماژول ورودیِ برنامه (<code class="inline">js/app.js</code>) اجرا می‌گردد. این ماژول مسئول فراخوانی و مقداردهی اولیهٔ دیگر ماژول‌ها مانند مدل داده، نمایش (view)، کنترل‌کنندهٔ فرم و ابزارهای دسترسی به سخت‌افزار (deviceUtils) است. همچنین ارتباط داخلی بین ماژول‌ها به کمک یک Event Bus برقرار می‌شود تا تغییرات مدل به سرعت در رابط کاربری منعکس گردد.</p>
+      </div>
+
+      <div class="step">
+        <h4>گام دوم — آماده‌سازی دوربین و گرفتن عکس</h4>
+        <p>وقتی کاربر تصمیم به گرفتن تصویر می‌گیرد، ماژول <code class="inline">deviceUtils</code> درخواست دسترسی به دوربین را از مرورگر می‌خواهد (تابع <code class="inline">navigator.mediaDevices.getUserMedia()</code>). پس از قبول دسترسی، ویدئوی زنده در یک عنصر &lt;video&gt; نمایش داده می‌شود و کاربر می‌تواند لحظهٔ مناسب را انتخاب کند. گرفتن عکس به وسیلهٔ ترسیم فریم فعلی ویدیو روی یک عنصر <code class="inline">canvas</code> انجام می‌شود و سپس خروجی به صورت یک <code class="inline">Blob</code> استخراج می‌گردد. این روش به طور طبیعی متادیتای EXIF را حذف می‌کند، زیرا تصویر از نو تولید می‌شود؛ در نتیجه قبل از ارسال، نگرانی اولیهٔ متادیتا کاهش می‌یابد.</p>
+      </div>
+
+      <div class="step">
+        <h4>گام سوم — ورود و اعتبارسنجی اطلاعات متنی</h4>
+        <p>کاربر فیلدهای هویتی مانند نام، سن و شمارهٔ ملی را پر می‌کند. اعتبارسنجی ابتدایی در سمت کلاینت انجام می‌شود تا مقادیر نامعتبر یا ناقص پیش از ارسال شناسایی شوند؛ برای مثال سن باید عددی و در بازهٔ منطقی قرار گیرد و شمارهٔ ملی باید قالب مشخصی داشته باشد. با این حال، اعتبارسنجی نهایی و ایمن‌سازی داده‌ها باید در سمت سرور صورت گیرد زیرا دادهٔ ارسال‌شده از کلاینت به سرور غیرقابل اعتماد است.</p>
+      </div>
+
+      <div class="step">
+        <h4>گام چهارم — ضبط صوت و تبدیل گفتار به متن</h4>
+        <p>در صورتی که پزشک توضیحات را شفاهی بیان کند، ماژول ضبط صوت (با استفاده از <code class="inline">MediaRecorder</code>) فایل صوتی را ذخیره می‌کند. تبدیل گفتار به متن می‌تواند به دو شکل انجام شود: یا از Web Speech API مرورگر استفاده شود که ممکن است داده را به سرویس‌های ابری ارسال کند، یا فایل صوتی به سرور فرستاده شود و در سرور با سرویس‌های تحت قرارداد و با رعایت قوانین حریم خصوصی، تبدیل انجام شود. برای داده‌های حساس مانند توضیحات پزشکی، گزینهٔ دوم (پردازش سرور-ساید در محیط امن و تحت قرارداد) از نظر حریم خصوصی ترجیح داده می‌شود.</p>
+      </div>
+
+      <div class="step">
+        <h4>گام پنجم — آماده‌سازی داده‌ها و ارسال به سرور</h4>
+        <p>پس از تکمیل فرم، مدل داده (PatientModel) تمام اطلاعات را جمع‌آوری می‌کند و آن را به یک شیء <code class="inline">FormData</code> تبدیل می‌نماید. فایل‌های تصاویر و صوت و فیلدهای متنی به صورت multipart اضافه می‌شوند. ارسال با تابعی مبتنی بر <code class="inline">fetch</code> انجام می‌گیرد که می‌تواند از <code class="inline">AbortController</code> برای اعمال تایم‌اوت استفاده کند. مهم است که هدر <code class="inline">Content-Type</code> توسط کد دستی تنظیم نشود؛ مرورگر به صورت خودکار مرزهای multipart را تعیین می‌کند.</p>
+      </div>
+
+      <div class="step">
+        <h4>گام ششم — پردازش و ذخیره‌سازی در سرور</h4>
+        <p>سرور باید دریافت‌کنندهٔ ارسال‌ها را اعتبارسنجی کند، نوع فایل را با بررسی magic-bytes تأیید نماید، متادیتا را بررسی و در صورت لزوم حذف کند، اندازهٔ فایل را محدود کند، و تصاویر را به شکل امن ذخیره کند. برای ذخیرهٔ فیلدهای حساس مانند شمارهٔ ملی پیشنهاد می‌شود به‌جای ذخیرهٔ متن صریح از تکنیک‌هایی مانند HMAC (برای pseudonymization) استفاده شود تا هم توانایی جستجو حفظ گردد و هم از افشای مستقیم جلوگیری شود. همچنین توصیه می‌شود کلیدهای رمزنگاری در KMS یا vault امن نگهداری شوند و دسترسی‌ها به دقت کنترل شوند.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="benefits">
+    <div class="section-title">مزایا و موارد کاربرد</div>
+    <p>این سامانه برای مراکزی طراحی شده است که نیاز به ثبت سریع و دقیق تصاویر و توضیحات پزشکی دارند. از مزایای اصلی می‌توان به موارد زیر اشاره کرد:</p>
+    <ul>
+      <li><strong>ثبت ساختاریافته و قابل پیگیری:</strong> تمام اطلاعات مربوط به هر بیمار در یک رکورد منظم ذخیره می‌شود که بازیابی، مرور و تحلیل را ساده می‌کند.</li>
+      <li><strong>افزایش بهره‌وری:</strong> با استفاده از ضبط صوت و تبدیل گفتار به متن (یا تایپ مستقیم)، زمان لازم برای تکمیل پرونده کاهش می‌یابد و فرآیند ثبت دل‌بخواه کاهش می‌یابد.</li>
+      <li><strong>قابلیت تحلیل و یکپارچه‌سازی:</strong> تصاویر دیجیتال ذخیره‌شده را می‌توان به سیستم‌های تشخیصی، الگوریتم‌های بینایی ماشین یا سامانه‌های اطلاعات سلامت متصل کرد.</li>
+      <li><strong>امنیت بهتر در مقابل روش‌های سنتی:</strong> با رعایت توصیه‌های امنیتی این مستند، ذخیره و انتقال داده‌ها امن‌تر و قابل ردیابی خواهد بود.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="models">
+    <div class="section-title">مدل دادهٔ اصلی: PatientModel — پیاده‌سازی و نکات</div>
+    <p class="lead">در این بخش پیاده‌سازی نمونه‌ای از کلاس &lt;em&gt;PatientModel&lt;/em&gt; ارائه شده و هر قسمت آن مطابق با نقش و مسئولیتش توضیح داده شده است. این مدل مرکز داده‌های موقت کلاینت است و پیش از ارسال، وضعیت فرم را نگهداری می‌کند.</p>
+
+    <pre class="code" dir="ltr">class PatientModel {
+  constructor() {
+    this.patientId = null;       
+    this.name = "";              
+    this.age = null;             
+    this.nationalId = "";        
+    this.leftImages = [];        
+    this.rightImages = [];       
+    this.notes = "";             
+    this.audioBlob = null;       
+    this.createdAt = new Date();
+  }
+
+  addImage(eye, file) {
+    const id = crypto.randomUUID();
+    const url = URL.createObjectURL(file);
+    const meta = { id, file, url, timestamp: Date.now() };
+    if (eye === 'left') this.leftImages.push(meta);
+    else this.rightImages.push(meta);
+    return meta;
+  }
+
+  removeImage(id) {
+    this.leftImages = this.leftImages.filter(i => i.id !== id);
+    this.rightImages = this.rightImages.filter(i => i.id !== id);
+  }
+
+  toFormData() {
+    const fd = new FormData();
+    fd.append('name', this.name || '');
+    fd.append('age', String(this.age || ''));
+    fd.append('national_id', this.nationalId || '');
+    fd.append('notes', this.notes || '');
+    if (this.audioBlob) fd.append('audio_note', this.audioBlob, 'note.webm');
+    this.leftImages.forEach((m, i) => fd.append('leftImages[]', m.file, `left-${i}.jpg`));
+    this.rightImages.forEach((m, i) => fd.append('rightImages[]', m.file, `right-${i}.jpg`));
+    return fd;
+  }
+}</pre>
+
+    <p>توضیح: در زمان افزودن هر تصویر، یک شناسهٔ یکتا (UUID) تولید می‌شود تا بتوان عکس‌ها را به‌صورت مستقل مدیریت کرد. برای نمایش محلی از <code class="inline">URL.createObjectURL</code> استفاده می‌گردد؛ هنگام حذف تصویر، لازم است که <code class="inline">URL.revokeObjectURL</code> فراخوانی شود تا حافظهٔ مرورگر آزاد شود. تابع <code class="inline">toFormData</code> مسئول ایجاد یک شیء FormData است که شامل تمامی فایل‌ها و فیلدهای متنی لازم برای ارسال به سرور می‌باشد.</p>
+  </div>
+
+  <div class="card" id="functions">
+    <div class="section-title">شرح توابع و ماژول‌های کلیدی</div>
+    <p class="lead">در این بخش نقش هر ماژول و توابع مهم آن با ورودی، خروجی و نکات پیاده‌سازی توضیح داده شده است تا توسعه‌دهنده بتواند به راحتی کد را دنبال کند و تغییرات لازم را اعمال نماید.</p>
+
+    <h3>1. js/app.js — ماژول ورود و هماهنگ‌کنندهٔ کلی</h3>
+    <p>ماژول <code class="inline">app.js</code> مسئول بوت‌استرپ برنامه و هماهنگ‌سازی بین دیگر ماژول‌ها است. وظایف این ماژول شامل مقداردهی اولیهٔ مدل و ویو، ثبت listenerهای کلی و مدیریت ارسال نهایی داده‌ها به سرور است. توابع پیشنهادی و نقش آن‌ها عبارت‌اند از:</p>
+    <div class="box-ltr">
+      <strong>توابع:</strong>
+      <ul>
+        <li><code>init()</code> — مقداردهی اولیه، ثبت رویدادها و آماده‌سازی وضعیت اولیهٔ برنامه.</li>
+        <li><code>handleSubmit(event)</code> — اعتبارسنجی ورودی‌ها، فراخوانی <code>model.toFormData()</code> و ارسال داده‌ها با <code>sendToServer</code>.</li>
+        <li><code>sendToServer(formData)</code> — ارسال داده با <code>fetch</code>، مدیریت تایم‌اوت و نمایش وضعیت به کاربر.</li>
+      </ul>
+    </div>
+
+    <h3>2. js/controller.js — کنترل تعامل‌های کاربر</h3>
+    <p>این ماژول نقطهٔ اتصال بین عناصر DOM و منطق برنامه است. <code class="inline">controller.js</code> همهٔ رویدادهای کنترل‌های فرم را می‌گیرد و آن‌ها را به عملیات روی مدل یا ویو تبدیل می‌کند. نمونهٔ توابع مهم عبارت‌اند از:</p>
+    <div class="box-ltr">
+    
+      <ul>
+        <li><code>bindUI()</code> — برقراری event listener برای دکمه‌ها و فیلدها.</li>
+        <li><code>onFileSelected(evt)</code> — خواندن فایل‌های انتخابی، اعتبارسنجی فرمت و اندازه، و افزودن به مدل.</li>
+        <li><code>confirmDelete(imageId)</code> — نمایش پنجرهٔ تایید و در صورت تأیید حذف تصویر از مدل.</li>
+      </ul>
+    </div>
+
+    <h3>3. js/deviceUtils.js — دسترسی به دوربین و صوت</h3>
+    <p>ماژول <code class="inline">deviceUtils.js</code> نقش واسط را برای کار با APIهای مرورگر دارد. این ماژول توابعی برای دریافت MediaStream از دوربین، گرفتن فریم و تبدیل آن به Blob، و ضبط صوت ارائه می‌دهد. توابع کلیدی عبارت‌اند از <code class="inline">getCameraStream</code>، <code class="inline">takePhotoFromStream</code> و <code class="inline">startRecording</code>/<code class="inline">stopRecording</code>.</p>
+
+    <h3>4. js/gallery.js — مدیریت و نمایش تصاویر</h3>
+    <p>وظیفهٔ این ماژول نمایش پیش‌نمایش تصاویر، مدیریت thumbnails، عملیات حذف و دانلود و همچنین بهینه‌سازی بارگذاری تصاویر است. این ماژول باید مطمئن شود که برای هر تصویر خاصیت <code class="inline">alt</code> مناسب وجود دارد و پس از حذف تصویر، URLهای محلی مربوطه آزاد شوند.</p>
+
+    <h3>5. js/lib/eventBus.js — سامانهٔ انتشار/اشتراک ساده</h3>
+    <p>Event Bus رابطی ساده برای ارتباط بین ماژول‌ها فراهم می‌آورد تا coupling بین آن‌ها کاهش یابد. API معمول این ماژول شامل <code class="inline">on(event, handler)</code>، <code class="inline">off(event, handler)</code> و <code class="inline">emit(event, payload)</code> است.</p>
+
+    <h3>6. js/utils.js و js/view.js</h3>
+    <p>ماژول <code class="inline">utils.js</code> توابع کمکی مانند اعتبارسنجی، تبدیل فایل به DataURL و تغییر اندازه تصاویر را در بر دارد. ماژول <code class="inline">view.js</code> مسئول به‌روزرسانی رابط کاربری، نمایش پیام‌ها (toast)، نمایش مدال‌ها و تغییر وضعیت دکمه‌ها می‌باشد.</p>
+  </div>
+
+  <div class="card" id="code-examples">
+    <div class="section-title">نمونه‌های کد عملی و توضیح</div>
+    <p class="lead">در این بخش دو نمونهٔ مهم کد با توضیحات مفصل ارائه شده است تا نحوهٔ پیاده‌سازی عملیات کلیدی روشن شود.</p>
+
+    <h4>الف) گرفتن عکس از ویدیو (بدون EXIF)</h4>
+    <pre class="code" dir="ltr">async function takePhotoFromVideo(videoEl, mimeType='image/jpeg', quality=0.9) {
+  const canvas = document.createElement('canvas');
+  canvas.width = videoEl.videoWidth;
+  canvas.height = videoEl.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), mimeType, quality);
+  });
+}</pre>
+
+    <h4>ب) ساخت FormData و ارسال امن</h4>
+    <pre class="code" dir="ltr">function sendPatientData(model, token) {
+  const fd = model.toFormData();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 120000);
+  return fetch('/api/patients', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: fd,
+    signal: controller.signal
+  }).then(async (resp) => {
+    clearTimeout(timeout);
+    if (!resp.ok) throw new Error('upload failed ' + resp.status);
+    return resp.json();
+  });
+}</pre>
+
+    <p class="small">توضیح: در این نمونه از <code class="inline">AbortController</code> برای تعیین تایم‌اوت استفاده شده است. توجه داشته باشید که هدر <code class="inline">Content-Type</code> نباید به صورت دستی تنظیم شود؛ مرورگر به‌طور خودکار مرزهای multipart را تعیین می‌کند.</p>
+  </div>
+
+  <div class="card" id="security-details">
+    <div class="section-title">جزییات و توصیه‌های امنیتی</div>
+    <p class="lead">از آن‌جایی که این سامانه با اطلاعات حساس سروکار دارد، رعایت نکات امنیتی زیر ضروری است. این توصیه‌ها هم در سمت کلاینت و هم در سمت سرور باید اجرا شوند.</p>
+    <ul>
+      <li><strong>استفاده از HTTPS:</strong> تمام ارتباطات باید تحت TLS برقرار شوند و HSTS فعال گردد تا از حملات MitM جلوگیری شود.</li>
+      <li><strong>عدم ذخیره‌سازی PII در localStorage:</strong> به هیچ عنوان شمارهٔ ملی یا متن کامل توضیحات پزشکی را در localStorage نگهداری نکنید؛ اگر نیاز به ذخیره‌سازی موقتی وجود دارد از session memory یا httpOnly cookies استفاده کنید.</li>
+      <li><strong>حذف EXIF و بررسی نوع فایل:</strong> قبل از ذخیره‌سازی تصویر، متادیتا را پاک کنید و نوع فایل را با magic-bytes بررسی نمایید تا از آپلود فایل‌های مخرب جلوگیری شود.</li>
+      <li><strong>پنهان‌سازی و pseudonymization:</strong> برای مقاصد جستجو بهتر است از HMAC یا سایر روش‌های تعیین‌کنندهٔ رمزنگاری‌شده استفاده شود تا متن صریح اطلاعات حساس ذخیره نشود.</li>
+      <li><strong>کنترل دسترسی و لاگینگ:</strong> همهٔ عملیات ذخیره و بازیابی باید تحت کنترل دسترسی باشند و لاگ‌ها به گونه‌ای ذخیره شوند که حاوی اطلاعات حساس نباشند مگر آن‌که خودِ لاگ‌ها نیز رمزنگاری شوند.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="testing-deploy">
+    <div class="section-title">تست، نگهداری و استقرار</div>
+    <p class="lead">برای تضمین کیفیت و امنیت، پیاده‌سازی مجموعه‌ای از تست‌ها و روند استقرار منظم ضروری است.</p>
+    <ul>
+      <li>نوشتن واحد تست (unit tests) برای توابع مهم مانند اعتبارسنجی شمارهٔ ملی و تولید FormData.</li>
+      <li>اجرای تست‌های یکپارچه‌سازی (integration tests) برای مسیر آپلود با استفاده از سرور تست یا mock.</li>
+      <li>استفاده از محیط CI برای lint، اجرای تست‌ها و تولید build نهایی با ابزارهایی مانند esbuild یا Vite.</li>
+      <li>ذخیرهٔ فایل‌ها در سرویس ذخیره‌سازی امن (مثلاً S3 با Server-Side Encryption) و مدیریت کلیدها در KMS.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
